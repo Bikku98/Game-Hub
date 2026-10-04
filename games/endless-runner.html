@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Endless Runner</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#020617;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+}
+
+h1{
+    color:#a855f7;
+}
+
+#game{
+    width:700px;
+    max-width:95%;
+    height:400px;
+    margin:auto;
+
+    position:relative;
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            #38bdf8,
+            #bae6fd
+        );
+
+    border:4px solid #a855f7;
+}
+
+#player{
+    position:absolute;
+
+    width:40px;
+    height:55px;
+
+    background:#ef4444;
+
+    bottom:30px;
+    left:80px;
+
+    border-radius:10px;
+}
+
+.obstacle{
+    position:absolute;
+
+    width:35px;
+    height:55px;
+
+    background:#111827;
+
+    bottom:30px;
+    right:-50px;
+}
+
+#ground{
+    position:absolute;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+    height:30px;
+
+    background:#22c55e;
+}
+
+button{
+    margin-top:15px;
+    padding:12px 25px;
+    border:0;
+    border-radius:20px;
+
+    background:#a855f7;
+    color:white;
+
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🏃 ENDLESS RUNNER</h1>
+
+<p id="score">Score: 0</p>
+
+<div id="game">
+
+<div id="player"></div>
+
+<div id="ground"></div>
+
+</div>
+
+<button onclick="location.href='../index.html'">
+🏠 BACK
+</button>
+
+<script>
+
+const player =
+document.getElementById("player");
+
+const game =
+document.getElementById("game");
+
+let jumping=false;
+
+let score=0;
+
+let speed=6;
+
+document.addEventListener(
+"keydown",
+function(e){
+
+    if(
+        (e.code==="Space" ||
+        e.key==="ArrowUp") &&
+        !jumping
+    ){
+
+        jump();
+
+    }
+
+});
+
+
+function jump(){
+
+    jumping=true;
+
+    let height=0;
+
+    let up=setInterval(function(){
+
+        height+=8;
+
+        player.style.bottom =
+            (30+height)+"px";
+
+        if(height>=160){
+
+            clearInterval(up);
+
+            let down=setInterval(function(){
+
+                height-=8;
+
+                player.style.bottom =
+                    (30+height)+"px";
+
+                if(height<=0){
+
+                    clearInterval(down);
+
+                    jumping=false;
+
+                }
+
+            },20);
+
+        }
+
+    },20);
+
+}
+
+
+function createObstacle(){
+
+    const obstacle =
+    document.createElement("div");
+
+    obstacle.className="obstacle";
+
+    game.appendChild(obstacle);
+
+    let x=700;
+
+    let timer=setInterval(function(){
+
+        x-=speed;
+
+        obstacle.style.left=x+"px";
+
+        let playerBottom =
+            parseInt(
+                player.style.bottom || 30
+            );
+
+        if(
+            x<120 &&
+            x>40 &&
+            playerBottom<80
+        ){
+
+            clearInterval(timer);
+
+            alert(
+                "💥 GAME OVER!\nScore: "+score
+            );
+
+            location.reload();
+
+        }
+
+        if(x<-60){
+
+            clearInterval(timer);
+
+            obstacle.remove();
+
+            score++;
+
+            document.getElementById(
+                "score"
+            ).innerText=
+                "Score: "+score;
+
+        }
+
+    },20);
+
+}
+
+setInterval(
+createObstacle,
+1500
+);
+
+</script>
+
+</body>
+</html>

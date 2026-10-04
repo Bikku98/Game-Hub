@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Zombie Escape</title>
+
+<style>
+
+body{
+    margin:0;
+
+    background:#020617;
+
+    color:white;
+
+    font-family:Arial;
+
+    text-align:center;
+}
+
+h1{
+    color:#22c55e;
+}
+
+#game{
+
+    width:700px;
+
+    max-width:95%;
+
+    height:450px;
+
+    margin:auto;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle,
+            #374151,
+            #111827
+        );
+
+    border:4px solid #22c55e;
+}
+
+#player{
+
+    position:absolute;
+
+    width:40px;
+    height:40px;
+
+    background:#22d3ee;
+
+    border-radius:50%;
+
+    left:330px;
+    top:200px;
+}
+
+.zombie{
+
+    position:absolute;
+
+    width:40px;
+    height:40px;
+
+    background:#22c55e;
+
+    border-radius:50%;
+}
+
+#score{
+
+    font-size:20px;
+
+}
+
+button{
+
+    margin-top:15px;
+
+    padding:12px 25px;
+
+    border:0;
+
+    border-radius:20px;
+
+    background:#22c55e;
+
+    font-weight:bold;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🧟 ZOMBIE ESCAPE</h1>
+
+<p id="score">Time: 0</p>
+
+<div id="game">
+
+<div id="player"></div>
+
+</div>
+
+<button onclick="location.href='../index.html'">
+🏠 BACK
+</button>
+
+<script>
+
+const game=
+document.getElementById("game");
+
+const player=
+document.getElementById("player");
+
+let px=330;
+let py=200;
+
+let time=0;
+
+document.addEventListener(
+"keydown",
+function(e){
+
+    if(e.key==="ArrowUp")
+        py-=15;
+
+    if(e.key==="ArrowDown")
+        py+=15;
+
+    if(e.key==="ArrowLeft")
+        px-=15;
+
+    if(e.key==="ArrowRight")
+        px+=15;
+
+    px=Math.max(
+        0,
+        Math.min(
+            660,
+            px
+        )
+    );
+
+    py=Math.max(
+        0,
+        Math.min(
+            410,
+            py
+        )
+    );
+
+    player.style.left=
+        px+"px";
+
+    player.style.top=
+        py+"px";
+
+});
+
+
+function createZombie(){
+
+    const zombie=
+    document.createElement("div");
+
+    zombie.className="zombie";
+
+    let zx=
+        Math.random()<0.5
+        ? 0
+        : 660;
+
+    let zy=
+        Math.random()*410;
+
+    zombie.style.left=
+        zx+"px";
+
+    zombie.style.top=
+        zy+"px";
+
+    game.appendChild(zombie);
+
+    let timer=setInterval(
+    function(){
+
+        let dx=px-zx;
+        let dy=py-zy;
+
+        let distance=
+            Math.sqrt(
+                dx*dx+
+                dy*dy
+            );
+
+        if(distance>0){
+
+            zx +=
+                dx/distance*1.5;
+
+            zy +=
+                dy/distance*1.5;
+
+        }
+
+        zombie.style.left=
+            zx+"px";
+
+        zombie.style.top=
+            zy+"px";
+
+        if(distance<35){
+
+            clearInterval(timer);
+
+            alert(
+                "🧟 YOU GOT CAUGHT!\nTime: "
+                +time
+            );
+
+            location.reload();
+
+        }
+
+    },30);
+
+}
+
+setInterval(
+createZombie,
+2000
+);
+
+setInterval(
+function(){
+
+    time++;
+
+    document.getElementById(
+        "score"
+    ).innerText=
+        "Time: "+time;
+
+},1000);
+
+</script>
+
+</body>
+
+</html>

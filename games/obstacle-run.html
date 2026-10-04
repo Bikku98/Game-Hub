@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Obstacle Run</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-family:Arial,sans-serif;
+    color:white;
+
+    background:
+        radial-gradient(circle at top,#3b176b,#080916 65%);
+}
+
+.game{
+    width:850px;
+    max-width:95%;
+    text-align:center;
+}
+
+h1{
+    font-size:42px;
+    margin-bottom:10px;
+
+    text-shadow:
+        0 0 15px #ff00dd,
+        0 0 30px #00eaff;
+}
+
+.stats{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+
+    font-size:21px;
+    margin-bottom:12px;
+}
+
+.arena{
+    position:relative;
+
+    width:100%;
+    height:500px;
+
+    overflow:hidden;
+
+    border:3px solid #00eaff;
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #15162e 0%,
+            #202044 50%,
+            #15162e 100%
+        );
+
+    box-shadow:
+        0 0 30px #00eaff55;
+}
+
+/* Road */
+
+.lane{
+    position:absolute;
+    top:0;
+    width:33.33%;
+    height:100%;
+
+    border-right:2px dashed #ffffff22;
+}
+
+.lane:nth-child(1){
+    left:0;
+}
+
+.lane:nth-child(2){
+    left:33.33%;
+}
+
+.lane:nth-child(3){
+    left:66.66%;
+    border:none;
+}
+
+/* Player */
+
+.player{
+    position:absolute;
+
+    width:55px;
+    height:65px;
+
+    bottom:35px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    border-radius:15px;
+
+    background:#00eaff;
+
+    box-shadow:
+        0 0 15px #00eaff,
+        0 0 30px #00eaff88;
+
+    transition:left .12s;
+}
+
+/* Player eyes */
+
+.player::before{
+    content:"";
+    position:absolute;
+
+    width:8px;
+    height:8px;
+
+    background:white;
+    border-radius:50%;
+
+    left:12px;
+    top:15px;
+
+    box-shadow:23px 0 white;
+}
+
+/* Obstacles */
+
+.obstacle{
+    position:absolute;
+
+    width:55px;
+    height:55px;
+
+    border-radius:10px;
+
+    background:#ff315c;
+
+    box-shadow:
+        0 0 15px #ff315c;
+
+    top:-70px;
+}
+
+/* Coins */
+
+.coin{
+    position:absolute;
+
+    width:30px;
+    height:30px;
+
+    border-radius:50%;
+
+    background:#ffd500;
+
+    border:4px solid #fff3a0;
+
+    box-shadow:
+        0 0 20px #ffd500;
+
+    top:-50px;
+}
+
+.message{
+    height:30px;
+    margin-top:10px;
+
+    font-size:19px;
+    font-weight:bold;
+}
+
+.controls{
+    margin-top:12px;
+
+    color:#cbd5ff;
+}
+
+button{
+    margin-top:15px;
+
+    padding:12px 25px;
+
+    border:none;
+    border-radius:12px;
+
+    background:#00eaff;
+    color:#061018;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+button:hover{
+    transform:scale(1.06);
+}
+
+.back{
+    background:#252d4a;
+    color:white;
+    margin-left:8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+<h1>🏃 OBSTACLE RUN</h1>
+
+<div class="stats">
+
+<div>
+    SCORE: <span id="score">0</span>
+</div>
+
+<div>
+    COINS: <span id="coins">0</span>
+</div>
+
+<div>
+    SPEED: <span id="speed">1</span>
+</div>
+
+</div>
+
+<div id="arena" class="arena">
+
+    <div class="lane"></div>
+    <div class="lane"></div>
+    <div class="lane"></div>
+
+    <div id="player" class="player"></div>
+
+</div>
+
+<div id="message" class="message">
+    RUN!
+</div>
+
+<div class="controls">
+    ⬅️ LEFT &nbsp;&nbsp; ➡️ RIGHT
+</div>
+
+<button onclick="restart()">
+    🔄 Restart
+</button>
+
+<button class="back"
+onclick="location.href='../index.html'">
+    🏠 Back to Lobby
+</button>
+
+</div>
+
+<script>
+
+const arena=document.getElementById("arena");
+const player=document.getElementById("player");
+
+const scoreText=document.getElementById("score");
+const coinsText=document.getElementById("coins");
+const speedText=document.getElementById("speed");
+const message=document.getElementById("message");
+
+let lane=1;
+
+let score=0;
+let coins=0;
+
+let speed=4;
+
+let gameRunning=true;
+
+let obstacles=[];
+let coinObjects=[];
+
+const lanePositions=[
+    "16.66%",
+    "50%",
+    "83.33%"
+];
+
+/* Move player */
+
+document.addEventListener("keydown",function(e){
+
+    if(!gameRunning) return;
+
+    if(
+        e.key==="ArrowLeft" ||
+        e.key.toLowerCase()==="a"
+    ){
+
+        if(lane>0){
+            lane--;
+            movePlayer();
+        }
+    }
+
+    if(
+        e.key==="ArrowRight" ||
+        e.key.toLowerCase()==="d"
+    ){
+
+        if(lane<2){
+            lane++;
+            movePlayer();
+        }
+    }
+
+    if(e.key===" "){
+        restart();
+    }
+
+});
+
+function movePlayer(){
+
+    player.style.left=lanePositions[lane];
+
+}
+
+/* Create obstacle */
+
+function createObstacle(){
+
+    if(!gameRunning) return;
+
+    const obstacle=document.createElement("div");
+
+    obstacle.className="obstacle";
+
+    const randomLane=
+        Math.floor(Math.random()*3);
+
+    obstacle.style.left=
+        lanePositions[randomLane];
+
+    obstacle.style.transform=
+        "translateX(-50%)";
+
+    arena.appendChild(obstacle);
+
+    obstacles.push({
+        element:obstacle,
+        lane:randomLane,
+        y:-70
+    });
+
+}
+
+/* Create coin */
+
+function createCoin(){
+
+    if(!gameRunning) return;
+
+    const coin=document.createElement("div");
+
+    coin.className="coin";
+
+    const randomLane=
+        Math.floor(Math.random()*3);
+
+    coin.style.left=
+        lanePositions[randomLane];
+
+    coin.style.transform=
+        "translateX(-50%)";
+
+    arena.appendChild(coin);
+
+    coinObjects.push({
+        element:coin,
+        lane:randomLane,
+        y:-50
+    });
+
+}
+
+/* Collision */
+
+function checkCollision(y,laneNumber,size){
+
+    const playerBottom=400;
+
+    return(
+        laneNumber===lane &&
+        y>playerBottom-size &&
+        y<playerBottom+60
+    );
+
+}
+
+/* Game loop */
+
+function gameLoop(){
+
+    if(!gameRunning){
+        requestAnimationFrame(gameLoop);
+        return;
+    }
+
+    score++;
+
+    scoreText.textContent=
+        Math.floor(score/10);
+
+    /* Increase speed */
+
+    if(score%500===0){
+
+        speed+=0.5;
+
+        speedText.textContent=
+            speed.toFixed(1);
+    }
+
+    /* Obstacles */
+
+    obstacles.forEach((obj,index)=>{
+
+        obj.y+=speed;
+
+        obj.element.style.top=
+            obj.y+"px";
+
+        if(checkCollision(obj.y,obj.lane,55)){
+
+            gameOver();
+        }
+
+        if(obj.y>520){
+
+            obj.element.remove();
+
+            obstacles.splice(index,1);
+        }
+
+    });
+
+    /* Coins */
+
+    coinObjects.forEach((obj,index)=>{
+
+        obj.y+=speed;
+
+        obj.element.style.top=
+            obj.y+"px";
+
+        if(
+            obj.lane===lane &&
+            obj.y>350 &&
+            obj.y<470
+        ){
+
+            coins++;
+
+            coinsText.textContent=coins;
+
+            obj.element.remove();
+
+            coinObjects.splice(index,1);
+
+            return;
+        }
+
+        if(obj.y>520){
+
+            obj.element.remove();
+
+            coinObjects.splice(index,1);
+        }
+
+    });
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+/* Spawn obstacles */
+
+setInterval(()=>{
+
+    if(gameRunning){
+
+        createObstacle();
+
+    }
+
+},900);
+
+/* Spawn coins */
+
+setInterval(()=>{
+
+    if(gameRunning){
+
+        createCoin();
+
+    }
+
+},1200);
+
+/* Game over */
+
+function gameOver(){
+
+    if(!gameRunning) return;
+
+    gameRunning=false;
+
+    message.textContent=
+        "💥 GAME OVER! Score: "+
+        Math.floor(score/10);
+
+    message.style.color="#ff315c";
+
+}
+
+/* Restart */
+
+function restart(){
+
+    obstacles.forEach(obj=>{
+        obj.element.remove();
+    });
+
+    coinObjects.forEach(obj=>{
+        obj.element.remove();
+    });
+
+    obstacles=[];
+    coinObjects=[];
+
+    lane=1;
+
+    score=0;
+    coins=0;
+
+    speed=4;
+
+    gameRunning=true;
+
+    scoreText.textContent="0";
+    coinsText.textContent="0";
+    speedText.textContent="1";
+
+    message.textContent="RUN!";
+    message.style.color="white";
+
+    movePlayer();
+
+}
+
+movePlayer();
+
+gameLoop();
+
+</script>
+
+</body>
+</html>

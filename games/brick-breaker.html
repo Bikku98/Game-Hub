@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Brick Breaker</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#020617;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+}
+
+h1{
+    color:#ec4899;
+}
+
+canvas{
+    background:#111827;
+    border:4px solid #ec4899;
+    max-width:95%;
+}
+
+button{
+    margin-top:15px;
+    padding:12px 25px;
+    border:0;
+    border-radius:20px;
+    background:#ec4899;
+    color:white;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🧱 BRICK BREAKER</h1>
+
+<p>Move with mouse or Arrow Keys</p>
+
+<canvas
+id="game"
+width="480"
+height="500">
+</canvas>
+
+<br>
+
+<button onclick="location.href='../index.html'">
+🏠 BACK
+</button>
+
+<script>
+
+const canvas=
+document.getElementById("game");
+
+const ctx=
+canvas.getContext("2d");
+
+let x=240;
+let y=430;
+
+let dx=3;
+let dy=-3;
+
+let paddleX=190;
+
+let score=0;
+
+const bricks=[];
+
+for(let r=0;r<5;r++){
+
+    for(let c=0;c<8;c++){
+
+        bricks.push({
+
+            x:c*60+5,
+            y:r*25+30,
+            w:50,
+            h:18,
+            alive:true
+
+        });
+
+    }
+
+}
+
+
+document.addEventListener(
+"keydown",
+function(e){
+
+    if(e.key==="ArrowLeft")
+        paddleX-=25;
+
+    if(e.key==="ArrowRight")
+        paddleX+=25;
+
+    paddleX=Math.max(
+        0,
+        Math.min(
+            380,
+            paddleX
+        )
+    );
+
+});
+
+
+canvas.addEventListener(
+"mousemove",
+function(e){
+
+    const rect=
+        canvas.getBoundingClientRect();
+
+    paddleX=
+        e.clientX-
+        rect.left-
+        50;
+
+});
+
+
+function draw(){
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    // Ball
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        y,
+        8,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fillStyle="#22d3ee";
+
+    ctx.fill();
+
+    // Paddle
+
+    ctx.fillStyle="#ec4899";
+
+    ctx.fillRect(
+        paddleX,
+        470,
+        100,
+        12
+    );
+
+    // Bricks
+
+    bricks.forEach(function(b){
+
+        if(b.alive){
+
+            ctx.fillStyle="#f59e0b";
+
+            ctx.fillRect(
+                b.x,
+                b.y,
+                b.w,
+                b.h
+            );
+
+        }
+
+    });
+
+}
+
+
+function update(){
+
+    x+=dx;
+    y+=dy;
+
+    if(
+        x<8 ||
+        x>472
+    ){
+
+        dx=-dx;
+
+    }
+
+    if(y<8){
+
+        dy=-dy;
+
+    }
+
+    if(
+        y>455 &&
+        x>paddleX &&
+        x<paddleX+100
+    ){
+
+        dy=-Math.abs(dy);
+
+    }
+
+    bricks.forEach(function(b){
+
+        if(
+            b.alive &&
+            x>b.x &&
+            x<b.x+b.w &&
+            y>b.y &&
+            y<b.y+b.h
+        ){
+
+            b.alive=false;
+
+            dy=-dy;
+
+            score++;
+
+        }
+
+    });
+
+    if(y>500){
+
+        alert(
+            "💥 GAME OVER!\nScore: "+score
+        );
+
+        location.reload();
+
+    }
+
+    if(score===bricks.length){
+
+        alert("🎉 YOU WIN!");
+
+        location.reload();
+
+    }
+
+}
+
+
+function loop(){
+
+    update();
+    draw();
+
+    requestAnimationFrame(loop);
+
+}
+
+loop();
+
+</script>
+
+</body>
+</html>

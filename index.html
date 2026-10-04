@@ -1,0 +1,385 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GAME HUB</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+
+        <div class="logo">
+            🎮 GAME HUB
+        </div>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#games">Games</a>
+            <a href="#multiplayer">Multiplayer</a>
+            <a href="#about">About</a>
+        </nav>
+
+        <input
+            type="text"
+            id="search"
+            placeholder="🔍 Search games..."
+        >
+
+    </header>
+
+
+    <!-- MAIN -->
+    <main>
+
+        <!-- HERO -->
+        <section id="home" class="hero">
+
+            <div class="hero-content">
+
+                <p class="small-title">
+                    🎮 WELCOME TO
+                </p>
+
+                <h1>
+                    GAME HUB
+                </h1>
+
+                <p>
+                    Play exciting games, challenge yourself
+                    and have fun with your friends.
+                </p>
+
+                <button onclick="scrollToGames()">
+                    PLAY NOW 🚀
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- GAMES -->
+        <section id="games" class="games-section">
+
+            <div class="section-title">
+                <span>🔥</span>
+                <h2>Popular Games</h2>
+            </div>
+
+            <div class="game-grid" id="gameGrid">
+
+                <!-- GAME 1 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🏎️</div>
+
+                    <h3>Speed Racer</h3>
+
+                    <p>Racing</p>
+
+                    <button class="play-btn"
+                         onclick="location.href='games/speed-racer.html'">
+                            PLAY
+                           </button>
+
+                </div>
+
+
+                <!-- GAME 2 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🏃</div>
+
+                    <h3>Endless Runner</h3>
+
+                    <p>Adventure</p>
+
+                    <button class="play-btn"
+                        onclick="location.href='games/endless-runner.html'">
+                          PLAY
+                    </button>
+                </div>
+
+
+                <!-- GAME 3 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🧟</div>
+
+                    <h3>Zombie Escape</h3>
+
+                    <p>Action</p>
+                <button class="play-btn"
+                   onclick="location.href='games/zombie-escape.html'">
+                        PLAY
+                </button>
+                </div>
+
+
+                <!-- GAME 4 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🔫</div>
+
+                    <h3>Space Shooter</h3>
+
+                    <p>Shooting</p>
+
+                   <button class="play-btn"
+                     onclick="location.href='games/space-shooter.html'">
+                      PLAY
+                    </button>
+
+                </div>
+
+
+                <!-- GAME 5 -->
+                <div class="game-card">
+
+                    <div class="game-icon">⚔️</div>
+
+                    <h3>Mini Battle</h3>
+
+                    <p>Battle</p>
+
+                    <button class="play-btn"
+                       onclick="location.href='games/mini-battle.html'">
+                          PLAY
+                    </button>
+
+                </div>
+
+
+                <!-- GAME 6 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🧩</div>
+
+                    <h3>Puzzle Master</h3>
+
+                    <p>Puzzle</p>
+
+                  <button class="play-btn"
+                   onclick="location.href='games/puzzle-master.html'">
+                     PLAY
+                 </button>
+                </div>
+
+
+                <!-- GAME 7 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🐦</div>
+
+                    <h3>Sky Bird</h3>
+
+                    <p>Arcade</p>
+
+                  <button class="play-btn"
+                     onclick="location.href='games/sky-bird.html'">
+                       PLAY
+                  </button>
+
+                </div>
+
+
+                <!-- GAME 8 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🐍</div>
+
+                    <h3>Snake</h3>
+
+                    <p>Arcade</p>
+
+                   <button class="play-btn"
+                          onclick="location.href='games/snake.html'">
+                        PLAY
+                   </button>
+                </div>
+
+
+                <!-- GAME 9 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🧱</div>
+
+                    <h3>Brick Breaker</h3>
+
+                    <p>Arcade</p>
+
+                   <button class="play-btn"
+                     onclick="location.href='games/brick-breaker.html'">
+                      PLAY
+                 </button>
+                </div>
+
+
+                <!-- GAME 10 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🎯</div>
+
+                    <h3>Aim Challenge</h3>
+
+                    <p>Skill</p>
+
+                   <button class="play-btn"
+                     onclick="location.href='games/aim-challenge.html'">
+                         PLAY
+                   </button>
+                </div>
+
+
+                <!-- GAME 11 -->
+                <div class="game-card">
+
+                  <div class="game-icon">🏓</div>
+
+                    <h3>Ping Pong</h3>
+
+                    <p>Sports</p>
+                    <button class="play-btn"
+                     onclick="location.href='games/ping-pong.html'">
+                      PLAY
+                    </button>
+
+                 /div>
+
+                <!-- GAME 12 -->
+                <div class="game-card">
+
+                    <div class="game-icon">⚽</div>
+
+                    <h3>Penalty Kick</h3>
+
+                    <p>Sports</p>
+                      <button class="play-btn"
+                        onclick="location.href='games/penalty-kick.html'">
+                             PLAY
+                      </button>
+     
+                </div>
+
+                <!-- GAME 13 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🏃‍♂️</div>
+
+                    <h3>Obstacle Run</h3>
+
+                    <p>Adventure</p>
+
+                    <button class="play-btn"
+                     onclick="location.href='games/obstacle-run.html'">
+                        PLAY
+                   </button>
+
+                </div>
+
+
+                <!-- GAME 14 -->
+                <div class="game-card">
+
+                    <div class="game-icon">🧠</div>
+
+                    <h3>Memory Match</h3>
+
+                    <p>Puzzle</p>
+                  <button class="play-btn"
+                        onclick="location.href='games/memory-match.html'">
+                         PLAY
+                 </button>
+                </div>
+
+
+                <!-- GAME 15 -->
+                <div class="game-card multiplayer-card">
+
+                    <div class="game-icon">👥</div>
+
+                    <h3>2 Player Battle</h3>
+
+                    <p>Multiplayer</p>
+                   <button class="play-btn"
+                    onclick="location.href='games/2-player-battle.html'">
+                     PLAY
+                  </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MULTIPLAYER -->
+        <section id="multiplayer" class="multiplayer">
+
+            <div class="multiplayer-content">
+
+                <div class="multi-icon">
+                    👥
+                </div>
+
+                <h2>PLAY WITH YOUR FRIENDS</h2>
+
+                <p>
+                    Create a room, invite your friends
+                    and enjoy multiplayer games together.
+                </p>
+
+                <button onclick="openMultiplayer()">
+                    MULTIPLAYER 🎮
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ABOUT -->
+        <section id="about" class="about">
+
+            <h2>🎮 About Game Hub</h2>
+
+            <p>
+                Game Hub is a simple gaming website where
+                you can discover and play fun browser games.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <p>
+            © 2026 GAME HUB
+        </p>
+
+        <p>
+            Play • Compete • Have Fun 🎮|Tribute to Birendra kc🎆🎀|
+        </p>
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>
+```

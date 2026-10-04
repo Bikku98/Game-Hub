@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Puzzle Master</title>
+
+<style>
+body{
+    margin:0;
+    background:#020617;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+}
+
+h1{color:#f59e0b;}
+
+#board{
+    width:320px;
+    height:320px;
+    margin:25px auto;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:5px;
+}
+
+.tile{
+    background:#f59e0b;
+    color:#111827;
+    font-size:35px;
+    font-weight:bold;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.empty{
+    background:#1e293b;
+}
+
+button{
+    padding:12px 25px;
+    border:0;
+    border-radius:20px;
+    background:#f59e0b;
+    font-weight:bold;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🧩 PUZZLE MASTER</h1>
+
+<p>Numbers लाई 1–8 क्रम मिलाऊ!</p>
+
+<div id="board"></div>
+
+<button onclick="shuffle()">🔀 SHUFFLE</button>
+
+<br><br>
+
+<button onclick="location.href='../index.html'">
+🏠 BACK
+</button>
+
+<script>
+
+let numbers=[1,2,3,4,5,6,7,8,0];
+
+const board=document.getElementById("board");
+
+function draw(){
+
+    board.innerHTML="";
+
+    numbers.forEach(function(num,index){
+
+        const tile=document.createElement("div");
+
+        tile.className="tile";
+
+        if(num===0){
+            tile.classList.add("empty");
+        }else{
+            tile.innerText=num;
+        }
+
+        tile.onclick=function(){
+            move(index);
+        };
+
+        board.appendChild(tile);
+
+    });
+
+}
+
+function move(index){
+
+    const empty=numbers.indexOf(0);
+
+    const row=Math.floor(index/3);
+    const col=index%3;
+
+    const erow=Math.floor(empty/3);
+    const ecol=empty%3;
+
+    if(
+        Math.abs(row-erow)+
+        Math.abs(col-ecol)===1
+    ){
+
+        [numbers[index],numbers[empty]]
+        =
+        [numbers[empty],numbers[index]];
+
+        draw();
+
+        checkWin();
+    }
+
+}
+
+function checkWin(){
+
+    if(
+        numbers.join(",")===
+        "1,2,3,4,5,6,7,8,0"
+    ){
+
+        setTimeout(function(){
+
+            alert("🎉 PUZZLE COMPLETE!");
+
+        },100);
+
+    }
+
+}
+
+function shuffle(){
+
+    for(let i=0;i<100;i++){
+
+        const empty=numbers.indexOf(0);
+
+        const possible=[];
+
+        const row=Math.floor(empty/3);
+        const col=empty%3;
+
+        if(row>0)
+            possible.push(empty-3);
+
+        if(row<2)
+            possible.push(empty+3);
+
+        if(col>0)
+            possible.push(empty-1);
+
+        if(col<2)
+            possible.push(empty+1);
+
+        const random=
+            possible[
+                Math.floor(
+                    Math.random()*possible.length
+                )
+            ];
+
+        [numbers[empty],numbers[random]]
+        =
+        [numbers[random],numbers[empty]];
+    }
+
+    draw();
+}
+
+draw();
+shuffle();
+
+</script>
+
+</body>
+</html>

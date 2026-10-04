@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Sky Bird</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#020617;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+}
+
+h1{
+    color:#38bdf8;
+}
+
+#game{
+    width:500px;
+    max-width:95%;
+    height:600px;
+    margin:auto;
+    position:relative;
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            #38bdf8,
+            #bae6fd
+        );
+
+    border:4px solid #38bdf8;
+}
+
+#bird{
+    position:absolute;
+
+    width:35px;
+    height:35px;
+
+    background:#facc15;
+
+    border-radius:50%;
+
+    left:100px;
+    top:250px;
+}
+
+.pipe{
+    position:absolute;
+
+    width:70px;
+
+    background:#16a34a;
+}
+
+#score{
+    font-size:20px;
+}
+
+button{
+    margin-top:15px;
+    padding:12px 25px;
+    border:0;
+    border-radius:20px;
+    background:#38bdf8;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🐦 SKY BIRD</h1>
+
+<p id="score">Score: 0</p>
+
+<div id="game">
+
+<div id="bird"></div>
+
+</div>
+
+<button onclick="location.href='../index.html'">
+🏠 BACK
+</button>
+
+<script>
+
+const game=
+document.getElementById("game");
+
+const bird=
+document.getElementById("bird");
+
+let y=250;
+let velocity=0;
+
+let score=0;
+let gameOver=false;
+
+document.addEventListener(
+"keydown",
+function(e){
+
+    if(e.code==="Space"){
+
+        velocity=-8;
+
+    }
+
+});
+
+
+function createPipe(){
+
+    const gap=160;
+
+    const topHeight=
+        80+
+        Math.random()*220;
+
+    const bottomHeight=
+        600-
+        topHeight-
+        gap;
+
+    const top=
+        document.createElement("div");
+
+    const bottom=
+        document.createElement("div");
+
+    top.className="pipe";
+    bottom.className="pipe";
+
+    top.style.height=
+        topHeight+"px";
+
+    top.style.top="0";
+
+    bottom.style.height=
+        bottomHeight+"px";
+
+    bottom.style.bottom="0";
+
+    top.style.left="500px";
+    bottom.style.left="500px";
+
+    game.appendChild(top);
+    game.appendChild(bottom);
+
+    let x=500;
+
+    const timer=setInterval(function(){
+
+        if(gameOver){
+
+            clearInterval(timer);
+            return;
+
+        }
+
+        x-=4;
+
+        top.style.left=x+"px";
+        bottom.style.left=x+"px";
+
+        if(x<130 && x>65){
+
+            if(
+                y<topHeight ||
+                y+35>
+                600-bottomHeight
+            ){
+
+                endGame();
+
+            }
+
+        }
+
+        if(x===60){
+
+            score++;
+
+            document.getElementById(
+                "score"
+            ).innerText=
+                "Score: "+score;
+
+        }
+
+        if(x<-80){
+
+            top.remove();
+            bottom.remove();
+
+            clearInterval(timer);
+
+        }
+
+    },20);
+
+}
+
+
+function gameLoop(){
+
+    velocity+=0.45;
+
+    y+=velocity;
+
+    bird.style.top=y+"px";
+
+    if(y<0 || y>565){
+
+        endGame();
+
+    }
+
+}
+
+
+function endGame(){
+
+    if(gameOver)return;
+
+    gameOver=true;
+
+    alert(
+        "🐦 GAME OVER!\nScore: "+score
+    );
+
+    location.reload();
+
+}
+
+
+setInterval(gameLoop,20);
+
+setInterval(createPipe,1800);
+
+</script>
+
+</body>
+</html>
